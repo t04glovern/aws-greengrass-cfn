@@ -2,11 +2,11 @@
 
 AWS IoT Greengrass is a managed service that allows you to easily manage and communicate with edge devices. It sells itself as a central way to deploy to huge fleets of devices in a repeatable way.
 
-The irony of this is that deploying the foundation of AWS Greengrass can be quite complex and messy. In the offical guide for Greengrass Core, AWS recommends using the `Easy Creation` button. This is perfectly fine for testing purposes, however if you are deploying production workloads then repeatability is really key.
+The irony of this is that deploying the foundation of AWS Greengrass can be quite complex and messy. In the official guide for Greengrass Core, AWS recommends using the `Easy Creation` button. This is perfectly fine for testing purposes, however if you are deploying production workloads then repeatability is really key.
 
 CloudFormation resources are available for AWS Greengrass however the setup process can be rather complex when your device isn't sitting in AWS. This blog post is a continuation of an existing post on the AWS Blog called [Automating AWS IoT Greengrass Setup With AWS CloudFormation](https://aws.amazon.com/blogs/iot/automating-aws-iot-greengrass-setup-with-aws-cloudformation/). This post works fine for setups where EC2 is used, however there's a gap for people who deploy AWS IoT Greengrass Core to devices in the field.
 
-## Pre-requisites
+## Prerequisites
 
 * AWS Account with [AWS CLI Setup](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 * Edge Device, in the case of this post I'm using a [Raspberry Pi Zero W](https://www.raspberrypi.org/products/raspberry-pi-zero-w/)
@@ -32,7 +32,7 @@ Once the MicroSD card is flashed with Rasbian continue to the next step.
 
 ### Setup WiFi
 
-Setting up WiFi and SSH access in a headless fashion is really useful if you haven't got a monitor around. It's already very convinient for bulk deployments.
+Setting up WiFi and SSH access in a headless fashion is really useful if you haven't got a monitor around. It's already very convenient for bulk deployments.
 
 This might be different based on your OS, the general idea is that you will need to create:
 
@@ -77,7 +77,7 @@ sudo apt-get install python-pip -y
 
 ### Prepare for Greengrass
 
-Now we need to perform a set of steps that are best described in the [offical AWS setup guide for the Raspberry Pi](https://docs.aws.amazon.com/greengrass/latest/developerguide/setup-filter.rpi.html) These steps are highly recommended if you want to ensure you don't run into problems later down the track when running Greengrass Core.
+Now we need to perform a set of steps that are best described in the [official AWS setup guide for the Raspberry Pi](https://docs.aws.amazon.com/greengrass/latest/developerguide/setup-filter.rpi.html) These steps are highly recommended if you want to ensure you don't run into problems later down the track when running Greengrass Core.
 
 Start off by adding a new system user and group that Greengrass will use when executing. This helps separate the permissions away from our default user.
 
@@ -127,7 +127,7 @@ sudo reboot
 
 ### Greengrass Dependency Checker
 
-To confirm that all prerequisites are furfilled we'll use the [Greengrass Dependency Checker](https://github.com/aws-samples/aws-greengrass-samples). Run the following commands from the home directory of the Raspberry Pi we SSH'd into.
+To confirm that all prerequisites are fulfilled we'll use the [Greengrass Dependency Checker](https://github.com/aws-samples/aws-greengrass-samples). Run the following commands from the home directory of the Raspberry Pi we SSH'd into.
 
 ```bash
 mkdir /home/pi/Downloads && cd /home/pi/Downloads
@@ -150,7 +150,7 @@ These are safe to ignore for now, the first warning should be kept in mind howev
 
 The deployment of the Greengrass group can be done through the UI or CloudFormation. If you have an interest in how to do it by the UI, please check the [AWS guide on this](https://docs.aws.amazon.com/greengrass/latest/developerguide/gg-config.html), however I would advise against it for this tutorial.
 
-CloudFormation is a much better option as it gives us flexability for re-configuration later on through code changes.
+CloudFormation is a much better option as it gives us flexibility for re-configuration later on through code changes.
 
 ### CloudFormation Greengrass Deploy
 
@@ -166,9 +166,9 @@ aws cloudformation create-stack \
 
 The deployment will take a couple minutes and can be monitored via the [CloudFormation portal](https://console.aws.amazon.com/cloudformation/home?region=us-east-1). A number of resources will be created and managed for you:
 
-![Greengrass Cloudformation Deployment](img/greengrass-deploy-cloudformation.png)
+![Greengrass CloudFormation Deployment](img/greengrass-deploy-cloudformation.png)
 
-Next we're going to build the `tar.gz` bundle with our certificates and greengrass configuration. I've written a helper script for this in the [aws folder of the GitHub repository](https://github.com/t04glovern/aws-greengrass-cfn/blob/master/aws/greengrass.sh)
+Next we're going to build the `tar.gz` bundle with our certificates and Greengrass configuration. I've written a helper script for this in the [aws folder of the GitHub repository](https://github.com/t04glovern/aws-greengrass-cfn/blob/master/aws/greengrass.sh)
 
 The general idea is that the certificate details need to be zipped up and deployed to the Raspberry Pi, so we export this information from the CloudFormation stack using the following:
 
@@ -236,7 +236,7 @@ Then a `config.json` file is generated using all this information that will be u
 
 Finally all the files are zipped up and saved. To perform all these steps in one easy hit, run the following:
 
-**NOTE**: *This script assumes that you deployed to `us-east-1` and left the stackname as `devopstar-rpi-gg-core`. If you changed that portion, replace references to `devopstar-rpi-gg-core` with your own stack name.*
+**NOTE**: *This script assumes that you deployed to `us-east-1` and left the stack name as `devopstar-rpi-gg-core`. If you changed that portion, replace references to `devopstar-rpi-gg-core` with your own stack name.*
 
 ```bash
 cd aws
@@ -323,7 +323,7 @@ sudo ./greengrass-service.sh
 
 #### Greengrass SDK
 
-If you don't want to bundle the greengrasssdk in with your application, you can install it globally
+If you don't want to bundle the [greengrasssdk](https://pypi.org/project/greengrasssdk/) in with your application, you can install it globally
 
 ```bash
 sudo pip install greengrasssdk
@@ -333,7 +333,7 @@ If you choose not to go down this route you can manually bundle `greengrasssdk` 
 
 #### Greengrass Deploy [CLI]
 
-To create our first deployment we first need to retrive our Greengrass Group ID
+To create our first deployment we first need to retrieve our Greengrass Group ID
 
 ```bash
 aws greengrass list-groups
@@ -352,7 +352,7 @@ aws greengrass list-groups
 # }
 ```
 
-In my case the group ID can be seen above, simply substitue it into the following command to kick off your first deployment
+In my case the group ID can be seen above, simply substitute it into the following command to kick off your first deployment
 
 ```bash
 aws greengrass create-deployment \
@@ -362,7 +362,7 @@ aws greengrass create-deployment \
 
 #### Greengrass Deployment [GUI]
 
-To deploy through the GUI, navigate to the [AWS IoT Greengrass portal](https://us-east-1.console.aws.amazon.com/iot/home?region=us-east-1#/greengrass/groups) and kick off a new deployment under the Greegrass group we just created
+To deploy through the GUI, navigate to the [AWS IoT Greengrass portal](https://us-east-1.console.aws.amazon.com/iot/home?region=us-east-1#/greengrass/groups) and kick off a new deployment under the Greengrass group we just created
 
 ![Greengrass Deployment](img/greengrass-deployment-01.png)
 
@@ -419,7 +419,7 @@ In order to test Greengrass, navigate to the Test portal under AWS IoT and subsc
 
 ## Greengrass Cleanup
 
-Once you're finished worknig with Greengrass it's really easy to cleanup the AWS resources we used. Run the following command to destory the CloudFormation stack
+Once you're finished working with Greengrass it's really easy to cleanup the AWS resources we used. Run the following command to destroy the CloudFormation stack
 
 ```bash
 aws cloudformation delete-stack \
