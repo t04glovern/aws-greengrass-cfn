@@ -352,12 +352,13 @@ aws greengrass list-groups
 # }
 ```
 
-In my case the group ID can be seen above, simply substitute it into the following command to kick off your first deployment
+In my case the group ID and version can be seen above, simply substitute it into the following command to kick off your first deployment
 
 ```bash
 aws greengrass create-deployment \
     --deployment-type NewDeployment \
-    --group-id "41752ff2-54e5-49e9-8751-d489e3e6fa1f"
+    --group-id "41752ff2-54e5-49e9-8751-d489e3e6fa1f" \
+    --group-version-id "1c578332-44f7-411b-9ebb-1139fa1e453a"
 ```
 
 #### Greengrass Deployment [GUI]
